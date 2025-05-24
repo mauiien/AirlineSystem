@@ -1,0 +1,97 @@
+{% extends "flights/layout.html" %}
+
+{% block body %}
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #fff0f5;
+    padding: 20px;
+    color: #6b004b;
+  }
+
+  h1, h2 {
+    text-align: center;
+    color: #d63384;
+  }
+
+  ul, form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 0;
+    list-style: none;
+    text-align: center;
+  }
+
+  li {
+    background: #fff;
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(255, 182, 193, 0.2);
+  }
+
+  select, input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ffb6c1;
+    border-radius: 6px;
+    background: #fff;
+    color: #6b004b;
+  }
+
+  input[type="submit"] {
+    background: #d63384;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  input[type="submit"]:hover {
+    background: #e255a3;
+  }
+
+  a {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    color: #d63384;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+
+<h1>Flight {{ flight.id }}</h1>
+
+<ul>
+  <li><strong>Origin:</strong> {{ flight.origin }}</li>
+  <li><strong>Destination:</strong> {{ flight.destination }}</li>
+  <li><strong>Duration:</strong> {{ flight.duration }}</li>
+</ul>
+
+<h2>Passengers</h2>
+<ul>
+  {% for passenger in passengers %}
+    <li>{{ passenger }}</li>
+  {% empty %}
+    <li>No passengers.</li>
+  {% endfor %}
+</ul>
+
+<h2>Add Passenger</h2>
+<form action="{% url 'book' flight.id %}" method="post">
+  {% csrf_token %}
+  <select name="passenger">
+    {% for passenger in non_passengers %}
+      <option value="{{ passenger.id }}">{{ passenger }}</option>
+    {% endfor %}
+  </select>
+  <input type="submit" value="Add Passenger">
+</form>
+
+<a href="{% url 'index' %}">Back to Flight List</a>
+{% endblock %}
